@@ -13,6 +13,8 @@ const {json} = require("express");
 
 const connectDB = require ("./config/database");
 
+const userRoute = require('./router/userRoutes');
+
 require("dotenv").config();
 
 //connect to db
@@ -24,12 +26,15 @@ const app = express();
 //initialize express middleware
 app.use(json());
 
+// Inject routes
+app.use('/api', userRoute)
+
 // 
 app.get('/', (req, res) => {
     res.status(200).json({
         message: "App Running Perfectly and Transmitting"
     })
-} )
+})
 
 
 //PORT

@@ -7,30 +7,51 @@ require('dotenv').config();
 const { SECRET } = process.env;
 
 module.exports = (req, res, next) => {
-    // get token from header
-    const token = req.header("x-auth-token");
+  // initialize variable 
+  const token = req.headers.authorization;
 
-    //Check if token doesn't exist
-    if(!token) {
-        return res.status(401).json({
-            statusCode: 401,
-            message: "No token, authorization denied!"
-        })
-    }
+  if(!token) {
+    res.status(403).json({
+      message: "Token Not Found. Access Denied!"
+    })
+  }
 
-    //else
-    //token exists
+  if (token && token.startsWith('Bearer')){
+
     try {
-        const decoded = jwt.verify(token, SECRET);
+      // get token from header
+      token = token.split(' ')[1];
 
-        // Assign user to request object
-        req.user = decoded.user
-        next();
+      // verify token
+      const verifiedToken = jwt.verify(token, SECRET);
+
+      //get user from token
+      req.user = verifiedToken.user
+
+      return next();
 
     } catch (error) {
-        res.status(401).json({
-            statusCode: 401,
-            message: "Token is not valid"
-        })
+      res.status(401).json({
+        error: "Not Authorized"
+      })
     }
+  }
 }
+
+
+/**
+ * static authenticateAdmin(request, response, next) {
+    try {
+      let token = request.headers.authorization;
+      if (token && token.startsWith('Bearer')) {
+        token = token.slice(7, token.length);
+      }
+      request.user = Auth.verifyToken(token);
+      if (request.user.isAdmin === false) {
+        return ResponseHelper.setError(response, 403, errors.notAllowed);
+      }
+      return next();
+    } catch (error) {
+      if (error.message === 'jwt expired') {
+        return ResponseH
+*/

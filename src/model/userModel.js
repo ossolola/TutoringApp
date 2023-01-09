@@ -3,7 +3,6 @@ const {Schema, model} = require("mongoose");
 // Create User Schema
 const userSchema = new Schema(
     {
-
         // Defining Properties of the application user
         firstName: {
             type: String,
@@ -26,13 +25,17 @@ const userSchema = new Schema(
             enum: ["admin", "tutor", "student", "not assigned"],
             default: "not assigned"
         },
-        isTutor: {
+        isTutor:{
             type: Boolean,
-            default: 0
+            default: false
         },
         isAdmin: {
             type: Boolean,
-            default: 0
+            default: false
+        },
+        isVerified: {
+            type: Boolean,
+            default: false
         }
     },
     {
