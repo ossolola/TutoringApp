@@ -192,14 +192,14 @@ exports.registerStudent = async (req, res) => {
                         throw new err
                     }
 
-                    const url = `https://localhost:4000/user/confirm/${token}`;
+                    const url = `https://localhost:4000/email/confirmation/${token}`;
 
                     const text = `
                         <div>
                             <h1> Email Confirmation </h1>
                             <h2> Hello ${firstName} </h2>
                             <p>Verify your email address to complete the signup and login to your account on the TutoringApp as a student</p>
-                            <a href= ${url} > Click here</a>
+                            <a> ${url} </a>
                         </div>
                     `;
 
@@ -292,14 +292,14 @@ exports.registerTutor = async (req, res) => {
                         throw new err
                     }
 
-                    const url = `https://localhost:4000/user/confirm/${token}`;
+                    const url = `https://localhost:4000/email/confirmation/${token}`;
 
                     const text = `
                         <div>
                             <h1> Email Confirmation </h1>
                             <h2> Hello ${firstName} </h2>
                             <p>Verify your email address to complete the signup and login to your account on the TutoringApp as a student</p>
-                            <a href= ${url} > Click here</a>
+                            <a> ${url} </a>
                         </div>
                     `;
 
@@ -317,6 +317,43 @@ exports.registerTutor = async (req, res) => {
                 }
             );
         }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
+    }
+};
+
+
+// @route       POST api/email/confirmation
+// @desc        Verification of email address
+// @access      Public 
+
+exports.confirmEmail = async (req, res) => {
+
+    try {
+        const { user: {id} } = jwt.verify(req.params.token, SECRET);
+
+        // fetch user with the ID
+        const user = await Users.findOne(id);
+
+        // Update User Schema
+        if (!user) {
+           return res.status(400).json({
+            success: false,
+            message:"User not found"
+           })
+        }
+
+        user.isVerified = true;
+
+        res.status(200).json({
+            success: true,
+            message: "Account Verified",
+            user
+        });
+
     } catch (error) {
         res.status(500).json({
             success: false,

@@ -13,8 +13,6 @@ const {json} = require("express");
 
 const connectDB = require ("./config/database");
 
-const userRoute = require('./router/userRoutes');
-
 require("dotenv").config();
 
 //connect to db
@@ -26,8 +24,15 @@ const app = express();
 //initialize express middleware
 app.use(json());
 
+// Require Routes
+const userRoute = require('./router/userRoutes');
+
 // Inject routes
 app.use('/api', userRoute)
+
+// Seeders
+const {seedAdmin} = require("./Seeder/admin");
+console.log(seedAdmin());
 
 // 
 app.get('/', (req, res) => {

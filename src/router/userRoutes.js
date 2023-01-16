@@ -46,4 +46,9 @@ router.post(
   userController.registerTutor
 );
 
+// confirm email route
+router.get(
+  '/email/confirmation', userController.confirmEmail
+);
+
 module.exports = router;

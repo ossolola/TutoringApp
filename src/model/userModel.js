@@ -25,14 +25,6 @@ const userSchema = new Schema(
             enum: ["admin", "tutor", "student", "not assigned"],
             default: "not assigned"
         },
-        isTutor:{
-            type: Boolean,
-            default: false
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false
-        },
         isVerified: {
             type: Boolean,
             default: false

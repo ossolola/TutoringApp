@@ -33,3 +33,6 @@ Content-Type: application/json
     "email" : "shijitolu@gmail.com",
     "password": "Sijibomi+2000"
 }
+
+###
+GET {{url}}/api/email/confirmation HTTP/1.1
